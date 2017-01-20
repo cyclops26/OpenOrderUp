@@ -1,0 +1,5 @@
+{% load cms_tags staticfiles sekizai_tags menu_tags %}
+
+<span class="theme-right" style="{% if theme.background_color %}background-color:#{{ theme.background_color }};{% endif %}{% if theme.background_image %}background:url('/media/{{ theme.background_image }}') {% if theme.background_repeat_x %}repeat-x{% endif %} {% if theme.background_repeat_y %}repeat-y{% endif %};{% endif %}">
+    <img alt="right image" src="/media/{{ theme.image }}" title="Side Bar" />
+</span>

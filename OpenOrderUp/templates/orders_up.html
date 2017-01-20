@@ -1,0 +1,138 @@
+{% load cms_tags staticfiles sekizai_tags menu_tags %}
+
+<h1 style="font-weight:bold;font-size:100px;" id="pg_head_title">Ready for Pickup</h1>
+<div class="order-feed">
+</div>
+<div style="clear: both;"></div>
+
+<script type="text/javascript">
+    function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
+
+    function loadOrders(){
+        var data_feed = "";
+        var clr_class = "{{ restaurant.order_color }}";
+
+if ( "{{ restaurant.short_name }}" != "subco-tilley" ) {
+
+        var now = new Date();
+        var f_now = [
+                now.getHours(),
+                ':',
+                now.getMinutes(),
+                ':',
+                now.getSeconds()
+            ].join('');
+        var m_now = ( now.getHours() * 60 * 60 * 1000 ) + ( now.getMinutes() * 60 * 1000 ) + ( now.getSeconds() * 1000 );
+
+        $.getJSON( "http://SERVER_NAME/en/schedule/today/{{ restaurant.short_name }}/?format=json", function() {
+            format: "json"
+        }).done(function( s_data ) {
+            if( s_data != undefined ){
+                o = s_data[0]['from_hour'].split(":");
+                c = s_data[0]['to_hour'].split(":");
+                o = ( o[0] * 60 * 60 * 1000 ) + ( o[1] * 60 * 1000 ) + ( o[2] * 1000 );
+                c = ( c[0] * 60 * 60 * 1000 ) + ( c[1] * 60 * 1000 ) + ( c[2] * 1000 );
+                // DEBUG // console.log("NOW:" + m_now + " | OPEN:" + o + " | CLOSE:" + c); 
+                if ( m_now > o && m_now < c ) {
+                    // DEBUG // console.log("OPEN");
+                    var opn_msg = 'Ready for Pickup';
+                    if ( "{{ restaurant.short_name }}" != "subco-tilley" ) { $('#pg_head_title').html(opn_msg); }
+                    $.getJSON( "http://SERVER_NAME/en/orders/{{ restaurant.short_name }}/?format=json", function() {
+                        format: "json"
+                    }).done(function( data ) {
+                            if(data != undefined){
+                                data = data.slice(0,8)
+                                $.each(data, function(i, item) {
+                                    var s_class = ' font-size: 120px !important; padding: 0px 20px !important; line-height: 1.75em !important;';
+                                    var blk_class = '';
+                                    if ( item.last_x_minutes == '.5' ) {
+                                        s_class = ' font-size:180px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                        blk_class = ' blink ';
+                                    } else if ( item.last_x_minutes == '1' ) {
+                                        s_class = ' font-size:180px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    } else if ( item.last_x_minutes == '2' ) {
+                                        s_class = ' font-size:140px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    } else if ( item.last_x_minutes == '5' ) {
+                                        s_class = ' font-size:120px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    }
+                                    order_item = '<span style=" padding: 20px 10px; "><button style="border-radius: 25px !important; ' + s_class + '" class=" ' + blk_class + ' ' + clr_class + '" type="button">' + pad(item.number, 3) + '</button></span>';
+                                    data_feed = data_feed + order_item;
+                                });
+                                $('.order-feed').html(data_feed);
+                            }
+                    });
+                } else {
+                    // DEBUG // console.log("CLOSED");
+                    var cls_msg = '{{ restaurant.fancy_name }}<br/>Is Currently Closed';
+                    if ( "{{ restaurant.short_name }}" != "subco-tilley" ) { $('#pg_head_title').html(cls_msg); }
+                }
+            }
+        });
+
+} else {
+
+                    $.getJSON( "http://SERVER_NAME/en/orders/{{ restaurant.short_name }}/?format=json", function() {
+                        format: "json"
+                    }).done(function( data ) {
+                            if(data != undefined){
+/**
+                                var unique_orders = {};
+                                $.each(data, functions(i, item) {
+                                    if( item.number not in unique_orders ){
+                                        unique_orders[item.number] = item.last_x_minutes;
+                                    }
+                                });
+                                unique_orders = unique_orders.slice(0,8);
+                                $.each(unique_orders, function(number, last_x_minutes) {
+                                    var s_class = ' font-size: 120px !important; padding: 0px 20px !important; line-height: 1.75em !important;';
+                                    var blk_class = '';
+                                    if ( last_x_minutes == '.5' ) {
+                                        s_class = ' font-size:180px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                        blk_class = ' blink ';
+                                    } else if ( last_x_minutes == '1' ) {
+                                        s_class = ' font-size:180px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    } else if ( last_x_minutes == '2' ) {
+                                        s_class = ' font-size:140px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    } else if ( last_x_minutes == '5' ) {
+                                        s_class = ' font-size:120px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    }
+                                    order_item = '<span style=" padding: 20px 10px; "><button style="border-radius: 25px !important; ' + s_class + '" class=" ' + blk_class + ' ' + clr_class + '" type="button">' + pad(number, 3) + '</button></span>';
+                                    data_feed = data_feed + order_item;
+                                });
+**/
+                                data = data.slice(0,8)
+                                $.each(data, function(i, item) {
+                                    var s_class = ' font-size: 120px !important; padding: 0px 20px !important; line-height: 1.75em !important;';
+                                    var blk_class = '';
+                                    if ( item.last_x_minutes == '.5' ) {
+                                        s_class = ' font-size:180px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                        blk_class = ' blink ';
+                                    } else if ( item.last_x_minutes == '1' ) {
+                                        s_class = ' font-size:180px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    } else if ( item.last_x_minutes == '2' ) {
+                                        s_class = ' font-size:140px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    } else if ( item.last_x_minutes == '5' ) {
+                                        s_class = ' font-size:120px !important; padding: 0px 30px !important; line-height: 1.75em !important;';
+                                    }
+                                    order_item = '<span style=" padding: 20px 10px; "><button style="border-radius: 25px !important; ' + s_class + '" class=" ' + blk_class + ' ' + clr_class + '" type="button">' + pad(item.number, 3) + '</button></span>';
+                                    data_feed = data_feed + order_item;
+                                });
+
+                                $('.order-feed').html(data_feed);
+                            }
+                    });
+
+}
+
+        setTimeout("loadOrders()",6000);
+    }
+
+    $( document ).ready(function() {
+        loadOrders();
+    });
+</script>
+

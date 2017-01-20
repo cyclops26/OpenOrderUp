@@ -1,0 +1,88 @@
+/** Core CSS **/
+
+html, body {
+    background:url('/static/core/images/content_bg.png') repeat-x;
+    background-position:166px 0px;
+    background-color:#f2f2f2;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    color:#555;
+    margin:0;
+    padding:0;
+    height:100%;
+}
+
+.wrapper {
+   min-height:100%;
+   height:100%
+   position:relative;
+   width:100%;
+}
+
+.container-top {
+    width:100%;
+}
+.container-top img { max-height: 60px; }
+.theme-header { width:100%;padding:40px 50px; }
+
+.container-orders {
+    padding:25px 50px;
+    text-align:center;
+    width:100%;
+}
+.container-orders p, .container-orders span {
+    font-size:48px;
+    word-spacing:.5em;
+    line-height:3em;
+    text-align:center;
+    width:100%;
+}
+.container-orders .btn {
+    font-size:48px;
+}
+.container-orders button {
+    padding: 20px;
+}
+
+.container-bottom {
+    position:absolute;
+    bottom:0;
+    height:80px;
+    width:100%;
+    text-align:center;
+    vertical-align:middle;
+}
+.theme-footer { width:100%;padding:10px;vertical-align:middle;text-align:center; }
+.theme-footer img { max-height:60px; }
+
+.container-left { height:100%;min-height:100%;width:auto;position:absolute;left:0; }
+.container-right { height:100%;min-height:100%;width:auto;position:absolute;right:0; }
+
+.theme-left { left:0;width:auto;min-height:100%;height:100%;position:absolute;left:0; }
+.theme-right { right:0;width:auto;min-height:100%;height:100%;position:absolute;right:0; }
+
+.theme-left img { vertical-align:middle;text-align:center; }
+.theme-right img { vertical-align:middle;text-align:center; }
+
+.order-feed span button { 
+    border-radius: 25px !important;
+    padding: 0px 20px !important;
+}
+
+.order-feed span {
+    padding: 20px 10px;
+}
+
+.blink {
+   animation: blink 1s steps(5, start) infinite;
+   -webkit-animation: blink 1s steps(5, start) infinite;
+}
+@keyframes blink {
+   to {
+      visibility: hidden;
+   }
+}
+@-webkit-keyframes blink {
+   to {
+      visibility: hidden;
+   }
+}
